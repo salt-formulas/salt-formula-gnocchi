@@ -1,0 +1,7 @@
+---
+summary: >
+  Initial release of salt-formula-gnocchi
+
+features:
+  - Supports deployment of statsd and server roles
+  - Gnocchi 4.0.X is supported

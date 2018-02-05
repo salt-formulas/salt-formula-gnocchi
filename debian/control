@@ -1,0 +1,15 @@
+Source: salt-formula-gnocchi
+Maintainer: Mykyta Karpin <mkarpin@mirantis.com>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 9), salt-master, python, python-yaml
+Standards-Version: 3.9.6
+Homepage: https://github.com/salt-formulas
+Vcs-Browser: https://github.com/salt-formulas/salt-formula-gnocchi
+Vcs-Git: https://github.com/salt-formulas/salt-formula-gnocchi.git
+
+Package: salt-formula-gnocchi
+Architecture: all
+Depends: ${misc:Depends}
+Description: gnocchi salt formula
+ Install and configure gnocchi.

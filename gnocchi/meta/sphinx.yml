@@ -1,0 +1,49 @@
+doc:
+  name: gnocchi
+  description: Gnocchi is an open-source time series database
+  role:
+  {%- if pillar.gnocchi.server is defined %}
+  {%- from "gnocchi/map.jinja" import cfg,server with context %}
+    server:
+      name: server
+      param:
+        debug: {{ server.debug }}
+        api_auth_mode:
+          name: "API authentication mode"
+          value: {{ server.identity.engine }}
+      {%- if server.get('api', {}).max_limit is defined %}
+        api_max_limit:
+          name: "The maximum number of items returned in a single response from a collection resource (integer value)"
+          value: {{ server.api.max_limit }}
+      {%- endif %}
+      {%- if server.get('api', {}).refresh_timeout is defined %}
+        api_refresh_timeout:
+          name: "Number of seconds before timeout when attempting to force refresh of metric. (integer value)"
+          value: {{ server.api.refresh_timeout }}
+      {%- endif %}
+      {%- if server.get('archive_policy', {}).default_aggregation_methods is defined %}
+        archive_policy_default_aggregation_methods:
+          name: "Default aggregation methods to use in created archive policies (list value)"
+          value: {{ ','.join(server.archive_policy.default_aggregation_methods) }}
+      {%- endif %}
+      {%- if server.identity.engine == 'keystone' %}
+        identity_auth_url:
+          name: "Identity auth url"
+          value: {{ server.identity.protocol }}://{{ server.identity.host }}:{{ server.identity.port }}
+        identity_auth_uri:
+          name: "Identity auth uri"
+          value: {{ server.identity.get('protocol', 'http') }}://{{ server.identity.host }}:5000
+        identity_username:
+          name: "Identity username"
+          value: {{ server.identity.user }}
+        identity_password:
+          name: "Identity password"
+          value: {{ server.identity.password }}
+      {%- endif %}
+        indexer_url:
+          name: "URL to indexer backend"
+          value: {{ cfg.database.engine }}+pymysql://{{ cfg.database.user }}:{{ cfg.database.password }}@{{ cfg.database.host }}/{{ cfg.database.name }}{%- if cfg.database.get('ssl',{}).get('enabled',False) %}?ssl_ca={{ cfg.database.ssl.get('cacert_file', cfg.cacert_file) }}{% endif %}
+        cache_memcached_servers:
+          name: "Memcached servers for token cache"
+          value: {%- for member in server.cache.members %}{{ member.host }}:{{ member.port }}{% if not loop.last %},{% endif %}{%- endfor %}
+  {%- endif %}

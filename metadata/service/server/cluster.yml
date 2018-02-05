@@ -1,0 +1,31 @@
+applications:
+- gnocchi
+classes:
+- service.gnocchi.common.cluster
+- service.gnocchi.support
+parameters:
+  gnocchi:
+    server:
+      enabled: true
+      debug: false
+      api:
+        auth_mode: keystone
+      identity:
+        engine: keystone
+        region: RegionOne
+        protocol: http
+        host: ${_param:cluster_vip_address}
+        port: 35357
+        private_port: 5000
+        user: gnocchi
+        password: ${_param:keystone_gnocchi_password}
+        tenant: service
+      cache:
+        engine: memcached
+        members:
+        - host: ${_param:cluster_node01_address}
+          port: 11211
+        - host: ${_param:cluster_node02_address}
+          port: 11211
+        - host: ${_param:cluster_node03_address}
+          port: 11211

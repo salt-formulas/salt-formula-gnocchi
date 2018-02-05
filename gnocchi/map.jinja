@@ -1,0 +1,59 @@
+{%- set default_params = {
+    'cacert_file': salt['grains.filter_by']({
+        'Debian': '/etc/ssl/certs/ca-certificates.crt',
+    })}
+%}
+
+{% set cfg = pillar.gnocchi.get('common', {}) %}
+
+{%- load_yaml as server_defaults %}
+BaseDefaults: {{ default_params }}
+Debian:
+  pkgs:
+  - gnocchi-api
+  - gnocchi-metricd
+  services:
+  - gnocchi-metricd
+  identity:
+    engine: keystone
+
+{%- endload %}
+
+{% set server = salt["grains.filter_by"](server_defaults, merge=pillar.gnocchi.get('server', {}), base='BaseDefaults') %}
+
+{%- if server.get('enabled', False) %}
+
+{% set cfg = salt['grains.filter_by']({
+    'default': cfg,
+}, default='default', merge=server) %}
+
+{%- endif %}
+
+{%- load_yaml as statsd_defaults %}
+BaseDefaults: {{ default_params }}
+Debian:
+  pkgs:
+  - gnocchi-statsd
+  services:
+  - gnocchi-statsd
+
+{%- endload %}
+
+{% set statsd = salt["grains.filter_by"](statsd_defaults, merge=pillar.gnocchi.get('statsd', {}), base='BaseDefaults') %}
+
+{%- if statsd.get('enabled', False) %}
+
+{% set cfg = salt['grains.filter_by']({
+    'default': cfg,
+}, default='default', merge=statsd) %}
+
+{%- endif %}
+
+{%- load_yaml as client_defaults %}
+BaseDefaults: {{ default_params }}
+Debian:
+  pkgs:
+  - python-gnocchiclient
+{%- endload %}
+
+{% set client = salt['grains.filter_by'](client_defaults, merge=pillar.gnocchi.get('client', {}), base='BaseDefaults') %}

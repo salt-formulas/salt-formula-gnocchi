@@ -1,0 +1,83 @@
+---
+driver:
+  name: docker
+  hostname: gnocchi.ci.local
+  use_sudo: false
+
+provisioner:
+  name: salt_solo
+  salt_install: bootstrap
+  salt_bootstrap_url: https://bootstrap.saltstack.com
+  salt_version: latest
+  require_chef: false
+  log_level: error
+  formula: gnocchi
+  grains:
+    noservices: True
+  dependencies:
+    - name: linux
+      repo: git
+      source: https://github.com/salt-formulas/salt-formula-linux
+    - name: apache
+      repo: git
+      source: https://github.com/salt-formulas/salt-formula-apache
+  state_top:
+    base:
+      "*":
+        - linux.system
+        - apache
+        - gnocchi
+  pillars:
+    top.sls:
+      base:
+        "*":
+          - linux_repo_openstack
+          - gnocchi
+          - release
+          - storage
+  pillars-from-files:
+    linux_repo_openstack.sls: tests/pillar/repo_mcp_openstack_<%= ENV['OS_VERSION'] || 'pike' %>.sls
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+  - name: <%= ENV['PLATFORM'] || 'ubuntu-xenial' %>
+    driver_config:
+      image: <%= ENV['PLATFORM'] || 'epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3' %>
+      platform: ubuntu
+
+suites:
+
+  - name: server_cluster
+    provisioner:
+      pillars-from-files:
+        gnocchi.sls: tests/pillar/server_cluster.sls
+      pillars:
+        release.sls:
+          gnocchi:
+            common:
+              version: <%= ENV['GNOCCHI_VERSION'] || '4.0' %>
+        storage.sls:
+          gnocchi:
+            common:
+              storage:
+                driver: <%= ENV['GNOCCHI_STORAGE'] || 'file' %>
+
+  - name: server_single
+    provisioner:
+      pillars-from-files:
+        gnocchi.sls: tests/pillar/server_single.sls
+      pillars:
+        release.sls:
+          gnocchi:
+            common:
+              version: <%= ENV['GNOCCHI_VERSION'] || '4.0' %>
+        storage.sls:
+          gnocchi:
+            common:
+              storage:
+                driver: <%= ENV['GNOCCHI_STORAGE'] || 'file' %>
+
+# vim: ft=yaml sw=2 ts=2 sts=2 tw=125

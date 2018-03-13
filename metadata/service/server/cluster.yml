@@ -20,3 +20,4 @@ parameters:
         user: gnocchi
         password: ${_param:keystone_gnocchi_password}
         tenant: service
+        auth_type: password

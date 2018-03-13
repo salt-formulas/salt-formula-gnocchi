@@ -22,8 +22,3 @@ parameters:
         password: ${_param:keystone_gnocchi_password}
         tenant: service
         auth_type: password
-      cache:
-        engine: memcached
-        members:
-        - host: ${_param:single_address}
-          port: 11211

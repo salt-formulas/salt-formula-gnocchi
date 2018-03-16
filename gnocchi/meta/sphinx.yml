@@ -43,7 +43,9 @@ doc:
         indexer_url:
           name: "URL to indexer backend"
           value: {{ cfg.database.engine }}+pymysql://{{ cfg.database.user }}:{{ cfg.database.password }}@{{ cfg.database.host }}/{{ cfg.database.name }}{%- if cfg.database.get('ssl',{}).get('enabled',False) %}?ssl_ca={{ cfg.database.ssl.get('cacert_file', cfg.cacert_file) }}{% endif %}
+      {%- if server.get('cache', {}).members is defined %}
         cache_memcached_servers:
           name: "Memcached servers for token cache"
           value: {% for member in server.cache.members %}{{ member.host }}:{{ member.port }}{% if not loop.last %},{% endif %}{% endfor %}
+      {%- endif %}
   {%- endif %}

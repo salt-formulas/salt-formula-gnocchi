@@ -262,6 +262,33 @@ Gnocchi archive policy definition example:
                   test_policy_rule2:
                     metric_pattern: 'foo2.*'
 
+=======
+Gnocchi logging configuration
+----------------------------------
+
+For enable fluend logging use
+
+.. code-block:: yaml
+
+  gnocchi:
+    _support:
+      fluentd:
+        enabled: true
+
+.. note:: Gnocchi doesnt support oslo.log options. So we cant use
+   log_appender and log_handlers options
+
+For change log_level or other log options
+
+.. code-block:: yaml
+
+  gnocchi:
+    common:
+      debug: true
+      use_syslog: true
+      use_journal: true
+      log_dir: /var/log/gnocchi
+      log_file: gnocchi.log
 
 
 More Information

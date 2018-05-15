@@ -1,0 +1,47 @@
+{%- if pillar.get('fluentd', {}).get('agent', {}).get('enabled', False) %}
+agent:
+  config:
+    label:
+      gnocchi:
+        input:
+          tail_gnocchi_metricd:
+            type: tail
+            tag: gnocchi.metricd
+            path: /var/log/gnocchi/gnocchi-metricd.log
+            pos_file: {{ pillar.fluentd.agent.dir.positiondb }}/gnocchi.pos
+            parser:
+              type: regexp
+              time_key: time
+              time_format: '%FT%H:%M:%S.%L%z'
+              keep_time_key: false
+              format: '/^(?<time>.*)\s\[(?<pid>[0-9]+)\]\s(?<severity_label>[A-Z]+)\s+(?<Payload>.*)$/'
+          tail_gnocchi_statsd:
+            type: tail
+            tag: gnocchi.statsd
+            path: /var/log/gnocchi/gnocchi-statsd.log
+            pos_file: {{ pillar.fluentd.agent.dir.positiondb }}/gnocchi.pos
+            parser:
+              type: regexp
+              time_key: time
+              time_format: '%FT%H:%M:%S.%L%z'
+              keep_time_key: false
+              format: '/^(?<time>.*)\s\[(?<pid>[0-9]+)\]\s(?<severity_label>[A-Z]+)\s+(?<Payload>.*)$/'
+        filter:
+          match_severity:
+            type: record_transformer
+            tag: gnocchi.**
+            enable_ruby: true
+            remove_keys: priority
+            record:
+              - name: programname
+                value: gnocchi
+              - name: Severity
+                value: "${ record['priority'].to_i % 8 }"
+              - name: severity_label
+                value: "${ {'DEBUG'=>7,'INFO'=>6,'NOTICE'=>5,'WARNING'=>4,'ERROR'=>3,'CRITICAL'=>2,'ALERT'=>1}.key(record['priority'].to_i % 8) }"
+        match:
+          push_to_default:
+            tag: gnocchi.**
+            type: relabel
+            label: default_output
+{%- endif %}

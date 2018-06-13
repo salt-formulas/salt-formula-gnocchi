@@ -232,6 +232,38 @@ Single Gnocchi service with Gnocchi statsd on the same node:
           address: 127.0.0.1
           port: 8125
 
+Gnocchi archive policy definition example:
+
+.. code-block:: yaml
+
+    gnocchi:
+      client:
+        enabled: True
+        resources:
+          v1:
+            enabled: true
+            cloud_name: admin_identity
+            archive_policies:
+              test_policy:
+                definition:
+                  - granularity: '1h'
+                    points: 10
+                    timespan: '10h'
+                  - granularity: '2h'
+                    points: 10
+                    timespan: '20h'
+                aggregation_methods:
+                  - mean
+                  - max
+                back_window: 2
+                rules:
+                  test_policy_rule1:
+                    metric_pattern: 'fo.*'
+                  test_policy_rule2:
+                    metric_pattern: 'foo2.*'
+
+
+
 More Information
 ================
 

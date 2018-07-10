@@ -46,8 +46,14 @@ def get_raw_client(cloud_name):
     service_type = 'metric'
     config = os_client_config.OpenStackConfig()
     cloud = config.get_one_cloud(cloud_name)
-    adapter = cloud.get_session_client(service_type)
-    adapter.version = '1'
+    api_version = '1'
+    try:
+        # NOTE(pas-ha) for Queens and later,
+        # 'version' kwarg in absent for Pike and older
+        adapter = cloud.get_session_client(service_type, version=api_version)
+    except TypeError:
+        adapter = cloud.get_session_client(service_type)
+        adapter.version = api_version
     try:
         access_info = adapter.session.auth.get_access(adapter.session)
         endpoints = access_info.service_catalog.get_endpoints()

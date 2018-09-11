@@ -17,11 +17,8 @@ gnocchi_statsd_services:
   {%- endif %}
   - require:
     - pkg: gnocchi_statsd_packages
+    - sls: gnocchi._common
   - watch:
     - gnocchi_common_conf
-{%- if cfg.database.get('ssl',{}).get('enabled', False) %}
-    - mysql_ca_gnocchi_file
-{%- endif %}
-
 
 {%- endif %}

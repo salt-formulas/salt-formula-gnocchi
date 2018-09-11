@@ -1,8 +1,13 @@
 {%- from "gnocchi/map.jinja" import cfg with context %}
 
+include:
+  - gnocchi._ssl.mysql
+
 gnocchi_common.pkgs:
   pkg.installed:
     - name: 'gnocchi-common'
+    - require_in:
+      - sls: gnocchi._ssl.mysql
 
 gnocchi_common_conf:
   file.managed:
@@ -11,17 +16,4 @@ gnocchi_common_conf:
   - template: jinja
   - require:
     - pkg: gnocchi_common.pkgs
-
-{%- if cfg.database.get('ssl',{}).get('enabled', False) %}
-mysql_ca_gnocchi_file:
-{%- if cfg.database.ssl.cacert is defined %}
-  file.managed:
-    - name: {{ cfg.databse.ssl.cacert_file }}
-    - contents_pillar: cfg.database:ssl:cacert
-    - mode: 0444
-    - makedirs: true
-{%- else %}
-  file.exists:
-   - name: {{ cfg.database.ssl.get('cacert_file', cfg.cacert_file) }}
-{%- endif %}
-{%- endif %}
+    - sls: gnocchi._ssl.mysql

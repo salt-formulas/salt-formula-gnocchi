@@ -290,6 +290,28 @@ For change log_level or other log options
       log_dir: /var/log/gnocchi
       log_file: gnocchi.log
 
+Enable x509 and ssl communication between Gnocchi and Galera cluster.
+---------------------
+By default communication between Gnocchi and Galera is unsecure.
+
+gnocchi:
+  common:
+    database:
+      x509:
+        enabled: True
+
+You able to set custom certificates in pillar:
+
+gnocchi:
+  common:
+    database:
+      x509:
+        cacert: (certificate content)
+        cert: (certificate content)
+        key: (certificate content)
+
+You can read more about it here:
+    https://docs.openstack.org/security-guide/databases/database-access-control.html
 
 More Information
 ================

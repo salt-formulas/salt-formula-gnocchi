@@ -47,10 +47,8 @@ gnocchi_server_services:
   {%- endif %}
   - require:
     - cmd: gnocchi_upgrade
+    - sls: gnocchi._common
   - watch:
     - gnocchi_common_conf
-{%- if cfg.database.get('ssl',{}).get('enabled', False) %}
-    - mysql_ca_gnocchi_file
-{%- endif %}
 
 {%- endif %}

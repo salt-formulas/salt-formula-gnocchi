@@ -20,18 +20,10 @@ install:
   - bundle install
 
 env:
-  - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=file OS_VERSION=pike SUITE=server_cluster
-  - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=redis OS_VERSION=pike SUITE=server_cluster
-  - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=file OS_VERSION=pike SUITE=server_single
-  - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=redis OS_VERSION=pike SUITE=server_single
   - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=file OS_VERSION=pike SUITE=server_cluster
   - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=redis OS_VERSION=pike SUITE=server_cluster
   - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=file OS_VERSION=pike SUITE=server_single
   - PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.0 GNOCCHI_STORAGE=redis OS_VERSION=pike SUITE=server_single
-  #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=file OS_VERSION=queens SUITE=server_cluster
-  #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=redis OS_VERSION=queens SUITE=server_cluster
-  #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=file OS_VERSION=queens SUITE=server_single
-  #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2016.3 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=redis OS_VERSION=queens SUITE=server_single
   #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=file OS_VERSION=queens SUITE=server_cluster
   #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=redis OS_VERSION=queens SUITE=server_cluster
   #- PLATFORM=epcim/salt-formulas:saltstack-ubuntu-xenial-salt-2017.7 GNOCCHI_VERSION=4.2 GNOCCHI_STORAGE=file OS_VERSION=queens SUITE=server_single

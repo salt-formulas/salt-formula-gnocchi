@@ -13,6 +13,8 @@ gnocchi_common_conf:
   file.managed:
   - name: /etc/gnocchi/gnocchi.conf
   - source: salt://gnocchi/files/{{ cfg.version }}/gnocchi.conf
+  - mode: 0640
+  - group: gnocchi
   - template: jinja
   - require:
     - pkg: gnocchi_common.pkgs

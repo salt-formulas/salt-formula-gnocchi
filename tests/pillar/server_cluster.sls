@@ -58,6 +58,10 @@ gnocchi:
         port: 11211
       - host: 127.0.3.1
         port: 11211
+      security:
+        enabled: true
+        strategy: ENCRYPT
+        secret_key: secret
     metricd:
       workers: 5
   statsd:
